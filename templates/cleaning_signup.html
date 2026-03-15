@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Cleaning Services Sign-Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body style="background-image: url('{{ url_for('static', filename='images/cleaning_bg.jpg') }}'); background-size: cover; background-position: center;">
+    <div class="container">
+        <!-- Sidebar for branding -->
+        <aside class="sidebar">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Company Logo" class="sidebar-logo">
+            <h1>Home Cleaning Services</h1>
+            <p>Welcome to our sign-up page for HandyPro home cleaning professionals. Join us and offer your skills to those in need!</p>
+        </aside>
+
+        <!-- Main content area for the sign-up form -->
+        <main class="main-content">
+            <div id="signup-form">
+                <h2>Home Cleaning Services Sign-Up</h2>
+                <form id="form" enctype="multipart/form-data">
+                    <div class="input-icon">
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                        <i class="fa fa-user"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <i class="fa fa-envelope"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="text" id="address" name="address" placeholder="Enter your address" required>
+                        <i class="fa fa-home"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="text" id="contact_details" name="contact_details" placeholder="Enter your contact number" required>
+                        <i class="fa fa-phone"></i>
+                    </div>
+
+                    <!-- Cleaning Experience -->
+                    <div class="input-icon">
+                        <label for="experience"><i class="fa fa-calendar-alt"></i> Experience:</label>
+                        <select id="experience" name="experience" required>
+                            <option value="" disabled selected>Select your experience</option>
+                            <option value="1 year">1 year</option>
+                            <option value="2 years">2 years</option>
+                            <option value="5 years">5 years</option>
+                            <option value="10 years">10 years</option>
+                        </select>
+                    </div>
+
+                    <!-- Cleaning Skills -->
+                    <div class="input-icon">
+                        <label for="skills"><i class="fa fa-broom"></i> Skills:</label>
+                        <select id="skills" name="skills" multiple required>
+                            <option value="Deep Cleaning">Deep Cleaning</option>
+                            <option value="Window Cleaning">Window Cleaning</option>
+                            <option value="Carpet Cleaning">Carpet Cleaning</option>
+                            <option value="Organizing and Decluttering">Organizing and Decluttering</option>
+                        </select>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div class="input-icon">
+                        <textarea id="certifications" name="certifications" placeholder="List your certifications" required></textarea>
+                        <i class="fa fa-certificate"></i>
+                    </div>
+
+                    <!-- References -->
+                    <div class="input-icon">
+                        <textarea id="references" name="references" placeholder="Provide your references" required></textarea>
+                        <i class="fa fa-address-book"></i>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-icon">
+                        <input type="password" id="password" name="password" placeholder="Enter a strong password" required oninput="checkPasswordStrength()">
+                        <i class="fa fa-lock"></i>
+                    </div>
+
+                    <div id="password-strength-bar">
+                        <div id="strength-progress"></div>
+                    </div>
+                    <div id="password-strength-text"></div>
+
+                    <div class="input-icon">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" required>
+                        <i class="fa fa-lock"></i>
+                    </div>
+
+                    <!-- Profile Image -->
+                    <div class="input-icon">
+                        <input type="file" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+                        <i class="fa fa-camera"></i>
+                    </div>
+
+                    <div id="image-preview" class="image-preview">
+                        <img id="preview" src="#" alt="Image Preview" style="display: none;">
+                    </div>
+
+                    <button type="button" onclick="submitSignup()">Register</button>
+                </form>
+                <a href="/cleaning_login">Already have an account? Log in</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Popup Notification -->
+    <div id="popup-notification" class="popup-notification">
+        <p id="popup-message"></p>
+    </div>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        .container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+        }
+        .sidebar {
+            background-color: #007BFF;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            width: 40%;
+        }
+        .sidebar-logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 10px 0;
+            font-size: 24px;
+        }
+        .main-content {
+            padding: 40px;
+            width: 60%;
+        }
+        #signup-form h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #333;
+        }
+        .input-icon {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-icon input, .input-icon select, .input-icon textarea {
+            width: 100%;
+            padding: 12px;
+            padding-left: 40px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .input-icon i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #007BFF;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .popup-notification {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <script>
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthText = document.getElementById('password-strength-text');
+            const strengthBar = document.getElementById('strength-progress');
+            let strength = 0;
+            if (/[A-Z]/.test(password)) strength += 20;
+            if (/[a-z]/.test(password)) strength += 20;
+            if (/[0-9]/.test(password)) strength += 20;
+            if (/[@#$%^&*]/.test(password)) strength += 20;
+            if (password.length >= 8) strength += 20;
+
+            strengthBar.style.width = strength + '%';
+            strengthText.textContent = strength <= 40 ? 'Weak Password' : strength <= 80 ? 'Medium Password' : 'Strong Password';
+            strengthBar.style.backgroundColor = strength <= 40 ? '#f44336' : strength <= 80 ? '#ff9800' : '#4caf50';
+        }
+
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+
+        async function submitSignup() {
+            const formData = new FormData(document.getElementById('form'));
+            try {
+                const response = await fetch('/cleaning_signup', { method: 'POST', body: formData });
+                const result = await response.json();
+                showPopupNotification(response.status === 201 ? 'success' : 'error', result.message || result.error);
+                if (response.status === 201) setTimeout(() => window.location.href = "/cleaning_login", 2000);
+            } catch (error) {
+                showPopupNotification('error', 'Error: Unable to sign up. Please try again later.');
+            }
+        }
+
+        function showPopupNotification(type, message) {
+            const popup = document.getElementById('popup-notification');
+            popup.textContent = message;
+            popup.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
+            popup.style.display = 'block';
+            setTimeout(() => { popup.style.display = 'none'; }, 3000);
+        }
+    </script>
+</body>
+</html>

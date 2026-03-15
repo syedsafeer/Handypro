@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Company Logo" class="sidebar-logo">
+            <h1>User Registration</h1>
+            <p>Join us and become part of our growing community!</p>
+        </aside>
+
+        <main class="main-content">
+            <div id="signup-form">
+                <h2>Create Your Account</h2>
+                <form id="form" enctype="multipart/form-data">
+                    <div class="input-icon">
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                        <i class="fa fa-user"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <i class="fa fa-envelope"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <i class="fa fa-lock"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                        <i class="fa fa-lock"></i>
+                    </div>
+
+                    <button type="button" onclick="submitSignup()">Sign Up</button>
+                </form>
+                <a href="/user_login">Already have an account? Log in</a>
+            </div>
+        </main>
+    </div>
+
+    <div id="popup-notification" class="popup-notification">
+        <p id="popup-message"></p>
+    </div>
+
+    <script>
+        async function submitSignup() {
+            const formData = new FormData(document.getElementById('form'));
+            try {
+                const response = await fetch('/user_signup', { method: 'POST', body: formData });
+                const result = await response.json();
+                showPopupNotification(response.status === 201 ? 'success' : 'error', result.message || result.error);
+                if (response.status === 201) setTimeout(() => window.location.href = "/user_login", 2000);
+            } catch (error) {
+                showPopupNotification('error', 'Error: Unable to sign up. Please try again later.');
+            }
+        }
+
+        function showPopupNotification(type, message) {
+            const popup = document.getElementById('popup-notification');
+            popup.textContent = message;
+            popup.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
+            popup.style.display = 'block';
+            setTimeout(() => { popup.style.display = 'none'; }, 3000);
+        }
+    </script>
+</body>
+</html>
+
+<!-- Add corresponding login and dashboard HTML similarly -->

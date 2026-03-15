@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Cleaning Services Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body style="background-image: url('{{ url_for('static', filename='images/cleaning_bg.jpg') }}'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fas fa-broom fa-3x"></i>
+            <h2>Home Cleaning Services Login</h2>
+        </div>
+
+        <!-- Display error message -->
+        {% if error %}
+            <div class="error-message"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
+        {% endif %}
+
+        <form id="login-form">
+            <div class="input-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-group">
+                <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="button" onclick="submitLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+
+        <!-- Link to redirect to signup page if needed -->
+        <p class="signup-link">Don't have an account? <a href="{{ url_for('cleaning_signup') }}">Sign up here</a></p>
+
+        <!-- Popup notification for login status -->
+        <div id="popup-notification" class="popup-notification">
+            <p id="popup-message"></p>
+        </div>
+    </div>
+
+    <style>
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-header {
+            margin-bottom: 25px;
+        }
+        .login-header i {
+            color: #007BFF;
+        }
+        h2 {
+            margin: 10px 0;
+            color: #333;
+            font-weight: bold;
+        }
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f0f2f5;
+            font-size: 16px;
+        }
+        .input-group i {
+            margin-right: 8px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        button i {
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .signup-link {
+            margin-top: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+        .signup-link a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .popup-notification {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+        }
+    </style>
+
+    <script>
+        async function submitLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/cleaning_login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    window.location.href = '/cleaning_dashboard';
+                } else {
+                    showPopupNotification('error', result.error || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                showPopupNotification('error', 'An error occurred. Please try again later.');
+            }
+        }
+
+        function showPopupNotification(type, message) {
+            const popup = document.getElementById('popup-notification');
+            const popupMessage = document.getElementById('popup-message');
+
+            popupMessage.textContent = message;
+            popup.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
+            popup.style.display = 'block';
+            setTimeout(() => { popup.style.display = 'none'; }, 3000);
+        }
+    </script>
+</body>
+</html>

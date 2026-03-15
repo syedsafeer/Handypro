@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ service_type }} Chats - HandyPro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f4f7fa, #c3cfe2);
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .chat-card {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .chat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-card img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #007bff;
+        }
+
+        .chat-card h3 {
+            margin: 0;
+            color: #007bff;
+        }
+
+        .chat-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>{{ service_type }} Chats</h2>
+
+        {% for sender in senders %}
+            <div class="chat-card" onclick="window.location.href='/chat_box/{{ sender.id }}'">
+                <img src="{{ sender.image_url or 'https://via.placeholder.com/70' }}" alt="User Image">
+                <div>
+                    <h3>{{ sender.name }}</h3>
+                    <p><strong>Email:</strong> {{ sender.email }}</p>
+                    <p><strong>Status:</strong> {{ sender.status }}</p>
+                </div>
+            </div>
+        {% else %}
+            <p style="text-align: center;">No chats available for {{ service_type }}.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

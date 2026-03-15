@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - HandyPro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 90%;
+    max-width: 800px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 15px;
+}
+
+.chat-header img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.chat-header img:hover {
+    transform: scale(1.1);
+}
+
+.chat-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.chat-header p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.messages {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.message {
+    background: #e0e0e0;
+    padding: 12px 18px;
+    border-radius: 15px;
+    margin: 8px 0;
+    max-width: 70%;
+    font-size: 16px;
+    position: relative;
+    animation: fadeIn 0.5s ease;
+}
+
+.message.sender {
+    background: #007bff;
+    color: white;
+    text-align: right;
+    margin-left: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.message-form input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.message-form input:focus {
+    border-color: #007bff;
+}
+
+.message-form button {
+    padding: 12px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.message-form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.feedback-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.feedback-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.modal-header .close {
+    cursor: pointer;
+    font-size: 24px;
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+
+.modal-header .close:hover {
+    color: #000;
+}
+
+.feedback-form input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.feedback-form input[type="text"]:focus {
+    border-color: #007bff;
+}
+
+.feedback-stars {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+    margin: 15px 0;
+}
+
+.feedback-stars i {
+    font-size: 28px;
+    color: #ccc;
+    transition: color 0.2s ease;
+}
+
+.feedback-stars i.selected {
+    color: #ffd700;
+}
+
+.feedback-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.feedback-form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.offer-btn {
+    padding: 8px 15px;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.offer-btn:hover {
+    background: #e68900;
+    transform: scale(1.05);
+}
+
+.offer-container {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 10px;
+    animation: fadeIn 0.5s ease;
+}
+
+.offer-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.offer-details {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.offer-actions button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.accept-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.accept-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.accept-offer-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 12px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.accept-offer-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <img src="{{ parent_user.image_url or 'https://via.placeholder.com/80' }}" alt="User Image">
+            <div>
+                <h2>{{ parent_user.name }}</h2>
+                <p><strong>Service Type:</strong> {{ service_type | capitalize }}</p>
+                <p><strong>Address:</strong> {{ parent_user.address or 'N/A' }}</p>
+            <!-- Accept Offer Button -->
+        <form action="/check_offers/{{ parent_user.id }}/{{ service_type }}" method="GET">
+            <button type="submit" class="accept-offer-btn">Check Offers</button>
+        </form>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages">
+            {% for msg in messages %}
+                <div class="message {{ 'sender' if msg.sender == session['user']['id'] else '' }}">
+                    {{ msg.message }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Message Form -->
+        <form action="" method="POST" class="message-form">
+            <input type="text" name="message" placeholder="Type your message..." required>
+            <button type="submit"><i class="fas fa-paper-plane"></i> Send</button>
+        </form>
+      <!-- Offers -->
+       {% for offer in offers %}
+            <div class="offer-card">
+                <h3>{{ offer.message }}</h3>
+                <p><strong>Sender:</strong> {{ offer.sender }}</p>
+                <p><strong>Receiver:</strong> {{ offer.receiver }}</p>
+                <p><strong>Status:</strong> {{ offer.is_offer }}</p>
+                <p><strong>Timestamp:</strong> {{ offer.timestamp }}</p>
+
+                {% if offer.is_offer == 'pending' %}
+                    <form action="{{ url_for('accept_offer', service_type=service_type, sender_receiver_key=offer.sender ~ '_' ~ offer.receiver, offer_id=offer.offer_id) }}" method="POST">
+                        <button type="submit" class="btn">Accept Offer</button>
+                    </form>
+                {% else %}
+                    <p><strong>Status:</strong> Accepted</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>No offers found for you.</p>
+        {% endfor %}
+
+        <!-- Feedback Button -->
+
+    </div>
+ <button class="feedback-btn" onclick="openModal()">Give Feedback</button>
+    <!-- Feedback Modal -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Feedback</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form action="/submit_feedback" method="POST" class="feedback-form" onsubmit="return validateFeedback()">
+                <input type="hidden" name="receiver_id" value="{{ receiver_id }}">
+                <input type="text" name="feedback" placeholder="Leave your feedback..." required>
+
+                <div class="feedback-stars">
+                    <i class="fas fa-star" data-value="1"></i>
+                    <i class="fas fa-star" data-value="2"></i>
+                    <i class="fas fa-star" data-value="3"></i>
+                    <i class="fas fa-star" data-value="4"></i>
+                    <i class="fas fa-star" data-value="5"></i>
+                </div>
+
+                <input type="hidden" name="rating" id="rating" value="">
+                <button type="submit">Submit Feedback</button>
+                <div id="feedback-error" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('feedbackModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('feedbackModal').style.display = 'none';
+        }
+
+        document.querySelectorAll('.feedback-stars i').forEach(star => {
+            star.addEventListener('click', function () {
+                const value = this.getAttribute('data-value');
+                document.getElementById('rating').value = value;
+
+                document.querySelectorAll('.feedback-stars i').forEach(s => s.classList.remove('selected'));
+                for (let i = 0; i < value; i++) {
+                    document.querySelectorAll('.feedback-stars i')[i].classList.add('selected');
+                }
+            });
+        });
+
+        function validateFeedback() {
+            const rating = document.getElementById('rating').value;
+            if (!rating || rating === '0') {
+                document.getElementById('feedback-error').innerText = 'Please select a rating before submitting.';
+                return false;
+            }
+            document.getElementById('feedback-error').innerText = '';
+            return true;
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('feedbackModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

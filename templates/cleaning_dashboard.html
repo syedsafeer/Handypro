@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HandyPro - Cleaning Services Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/worker_dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>HandyPro</h2>
+                <p>Cleaning Services Dashboard</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#"><i class="fas fa-home"></i> Dashboard Home</a></li>
+                <li><a href="#"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="/requests"><i class="fas fa-tools"></i> Requests</a></li>
+                <li><a href="/cleaning_reviews"><i class="fas fa-star"></i> Reviews</a></li>
+                <li><a href="/cleaning_logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header>
+                <div class="status-indicator">
+                    <span id="status-dot" class="status-dot offline"></span>
+                    <h1>Welcome, {{ user.name }}!</h1>
+                </div>
+                <p class="subheading">Cleaning Services Specialist - Account Verified</p>
+            </header>
+
+            <!-- Profile Section -->
+            <section class="profile-section">
+                <div class="profile-image">
+                    <img src="{{ user.image_url }}" alt="Profile Image">
+                </div>
+                <div class="profile-details">
+                    <p><strong><i class="fas fa-user"></i> Name:</strong> {{ user.name }}</p>
+                    <p><strong><i class="fas fa-envelope"></i> Email:</strong> {{ user.email }}</p>
+                    <p><strong><i class="fas fa-broom"></i> Role:</strong> Cleaning Expert</p>
+                </div>
+            </section>
+
+            <!-- Online/Offline Status Toggle -->
+            <section class="status-toggle">
+                <button id="status-button" onclick="toggleStatus()">Set Online</button>
+                <p id="status-text">Current Status: <span>Offline</span></p>
+            </section>
+            <section class="action-buttons">
+    <button class="order-btn stylish-btn" onclick="window.location.href='/requests'">
+        <i class="fas fa-shopping-cart"></i> Order
+    </button>
+    <button class="request-btn stylish-btn" onclick="window.location.href='/requests'">
+        <i class="fas fa-paper-plane"></i> Request
+    </button>
+    <button class="reviews-btn stylish-btn" onclick="window.location.href='/Reviews'">
+        <i class="fas fa-star"></i> Reviews
+    </button>
+</section>
+        </main>
+    </div>
+
+    <script>
+        let isOnline = false;
+        const userId = "{{ user.id }}";
+
+        async function toggleStatus() {
+            isOnline = !isOnline;
+            const statusText = document.getElementById('status-text').querySelector('span');
+            const statusButton = document.getElementById('status-button');
+            const statusDot = document.getElementById('status-dot');
+
+            statusText.textContent = isOnline ? "Online" : "Offline";
+            statusButton.textContent = isOnline ? "Set Offline" : "Set Online";
+            statusButton.classList.toggle('online', isOnline);
+            statusDot.classList.toggle('online', isOnline);
+
+            try {
+                const response = await fetch(`/api/update_status/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: isOnline ? "Online" : "Offline" })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update status.');
+                }
+            } catch (error) {
+                console.error("Error updating status:", error);
+                alert("Failed to update status. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>

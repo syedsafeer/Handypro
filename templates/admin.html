@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - User Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header id="admin-header">
+        <h1>Welcome, Admin</h1>
+        <p>Manage user requests and view dashboard insights</p>
+        <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </header>
+
+    <main id="admin-panel">
+        <section id="quick-actions">
+            <div class="card" onclick="navigateTo('/admin/users')">
+                <i class="fas fa-users fa-2x"></i>
+                <p>Total Users</p>
+                <span id="total-users-count">0</span>
+            </div>
+
+            <div class="card" onclick="navigateTo('/admin/registrations')">
+                <i class="fas fa-user-plus fa-2x"></i>
+                <p>New Registrations</p>
+                <span id="new-registrations-count">0</span>
+            </div>
+            <div class="card" onclick="navigateTo('/admin/messages')">
+                <i class="fas fa-envelope fa-2x"></i>
+                <p>Pending Messages</p>
+                <span id="pending-messages-count">0</span>
+            </div>
+            <div class="card" onclick="navigateTo('/admin/analytics')">
+                <i class="fas fa-chart-line fa-2x"></i>
+                <p>Analytics</p>
+                <span id="analytics-count">0</span>
+            </div>
+            <div class="card" onclick="navigateTo('/admin/online_workers')">
+                <i class="fas fa-user-check fa-2x"></i>
+                <p>Online Workers</p>
+                <span id="online-workers-count">0</span>
+            </div>
+        </section>
+
+        <section id="user-requests-section">
+            <h2>Pending User Requests</h2>
+            <table id="user-requests" class="user-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- User requests will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <div class="message" id="message"></div>
+        </section>
+
+        <section id="active-workers-section">
+            <h2>Active Workers</h2>
+            <ul id="active-workers-list">
+                <!-- Approved and online users will be listed here -->
+            </ul>
+        </section>
+    </main>
+
+    <div id="user-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>User Details</h2>
+            <div id="user-details" class="details-content">
+                <!-- User details will be populated here -->
+            </div>
+            <div class="modal-actions">
+                <button class="approve-btn" onclick="handleUserAction(currentUserId, currentUserType, 'approve')">Approve</button>
+                <button class="reject-btn" onclick="handleUserAction(currentUserId, currentUserType, 'reject')">Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUserId = null;
+        let currentUserType = null;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchPendingRequests();
+            fetchDashboardStatistics();
+            fetchActiveWorkers();
+        });
+
+        async function fetchPendingRequests() {
+            try {
+                const response = await fetch('/admin/requests');
+                const users = await response.json();
+
+                const tbody = document.querySelector('#user-requests tbody');
+                tbody.innerHTML = '';
+
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.name || 'N/A'}</td>
+                        <td>${user.email || 'N/A'}</td>
+                        <td>${user.type || 'N/A'}</td>
+                        <td><button class="view-btn" onclick="fetchUserDetails('${user.id}', '${user.type}')">View Details</button></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error fetching requests:", error);
+                showMessage("Error fetching user requests. Please try again later.", "error");
+            }
+        }
+
+        async function fetchUserDetails(userId, userType) {
+            currentUserId = userId;
+            currentUserType = userType;
+            try {
+                const response = await fetch(`/admin/user/${userType}/${userId}`);
+                const user = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(user.error || 'Failed to fetch user details.');
+                }
+
+                const userDetailsDiv = document.getElementById('user-details');
+                userDetailsDiv.innerHTML = `
+                    <div class="detail-item"><i class="fas fa-user"></i> <strong>Name:</strong> ${user.name || 'N/A'}</div>
+                    <div class="detail-item"><i class="fas fa-envelope"></i> <strong>Email:</strong> ${user.email || 'N/A'}</div>
+                    <div class="detail-item"><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> ${user.address || 'N/A'}</div>
+                    <div class="detail-item"><i class="fas fa-phone"></i> <strong>Contact:</strong> ${user.contact_details || 'N/A'}</div>
+                    <div class="detail-item"><i class="fas fa-tools"></i> <strong>Skills:</strong> ${(user.skills || []).join(', ')}</div>
+                `;
+                openModal();
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+                showMessage("An error occurred while fetching user details.", "error");
+            }
+        }
+
+        async function handleUserAction(userId, userType, action) {
+            try {
+                const response = await fetch(`/admin/${action}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, user_type: userType })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage(result.message, "success");
+                    fetchPendingRequests();
+                    fetchActiveWorkers();
+                    closeModal();
+                } else {
+                    showMessage(result.error || `Failed to ${action} user.`, "error");
+                }
+            } catch (error) {
+                console.error(`Error performing ${action}:`, error);
+                showMessage(`An error occurred while trying to ${action} the user.`, "error");
+            }
+        }
+
+        async function fetchActiveWorkers() {
+            try {
+                const response = await fetch('/admin/active_workers');
+                const workers = await response.json();
+
+                const workerList = document.getElementById('active-workers-list');
+                workerList.innerHTML = '';
+
+                workers.forEach(worker => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${worker.name || 'N/A'} - ${worker.email || 'N/A'}`;
+                    workerList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching active workers:', error);
+                showMessage("Error fetching active workers. Please try again later.", "error");
+            }
+        }
+
+        function openModal() {
+            const modal = document.getElementById('user-details-modal');
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('user-details-modal');
+            modal.style.display = 'none';
+            currentUserId = null;
+            currentUserType = null;
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('user-details-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = type;
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 5000);
+        }
+
+        async function fetchDashboardStatistics() {
+            document.getElementById('total-users-count').textContent = '50';
+            document.getElementById('new-registrations-count').textContent = '5';
+            document.getElementById('pending-messages-count').textContent = '2';
+            document.getElementById('analytics-count').textContent = '10';
+            document.getElementById('online-workers-count').textContent = '12';
+        }
+
+        function navigateTo(route) {
+            window.location.href = route;
+        }
+
+        function logout() {
+            window.location.href = '/admin/logout';
+        }
+    </script>
+</body>
+</html>

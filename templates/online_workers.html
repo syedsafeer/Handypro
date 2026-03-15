@@ -1,0 +1,52 @@
+<!-- templates/online_workers.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Workers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header id="admin-header">
+        <h1>Online Workers</h1>
+        <p>View details of currently active workers</p>
+        <a href="{{ url_for('admin_panel') }}" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </header>
+
+    <main id="online-workers-panel">
+        <section id="workers-list-section">
+            <h2>Currently Online Workers</h2>
+            <table class="user-table">
+                <thead>
+                    <tr>
+
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if online_users %}
+                        {% for worker in online_users %}
+                            <tr>
+
+                                <td>{{ worker.name }}</td>
+                                <td>{{ worker.email }}</td>
+                                <td>{{ worker.contact_details }}</td>
+                                <td>{{ worker.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center;">No workers are currently online.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

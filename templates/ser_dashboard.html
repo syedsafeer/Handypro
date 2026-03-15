@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HandyPro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f4f4f9, #e0e0f5);
+            margin: 0;
+            padding: 0;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .button-container button {
+            flex: 1 1 calc(33.333% - 10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-container button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* User Cards */
+        .user-card {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-card img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+            border: 3px solid #007bff;
+        }
+
+        .user-card h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .user-card p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .button-container button {
+                flex: 1 1 100%;
+                margin-bottom: 10px;
+            }
+
+            .user-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-card img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Welcome, {{ user.name }}!</h2>
+        <p>Your UID: {{ user.id }}</p>
+
+        <!-- Service Buttons -->
+        <div class="button-container">
+            <button onclick="fetchUsers('appliance_users')"><i class="fas fa-tools"></i> Appliance Services</button>
+            <button onclick="fetchUsers('carpentry_users')"><i class="fas fa-hammer"></i> Carpentry Services</button>
+            <button onclick="fetchUsers('cleaning_users')"><i class="fas fa-broom"></i> Cleaning Services</button>
+            <button onclick="fetchUsers('hvac_users')"><i class="fas fa-wind"></i> HVAC Services</button>
+            <button onclick="fetchUsers('plumbing_users')"><i class="fas fa-wrench"></i> Plumbing Services</button>
+            <button onclick="fetchUsers('electrical')"><i class="fas fa-bolt"></i> Electrical Services</button>
+        </div>
+
+        <!-- Users Container -->
+        <div id="users-container"></div>
+
+        <!-- Logout Button -->
+        <a href="/user_logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <script>
+        function fetchUsers(serviceType) {
+            fetch(`/get_users/${serviceType}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('users-container');
+                    container.innerHTML = '';
+
+                    if (data.length === 0) {
+                        container.innerHTML = '<p>No users found for this service.</p>';
+                        return;
+                    }
+
+                    data.forEach(user => {
+                        const userCard = `
+                            <div class="user-card" onclick="startChat('${user.id}', '${serviceType}')">
+                                <img src="${user.image_url || 'https://via.placeholder.com/90'}" alt="User Image">
+                                <div>
+                                    <h3>${user.name}</h3>
+                                    <p><strong>Address:</strong> ${user.address || 'N/A'}</p>
+                                    <p><strong>Certifications:</strong> ${user.certifications || 'N/A'}</p>
+                                    <p><strong>Skills:</strong> ${(user.skills || []).join(', ')}</p>
+                                    <p><strong>Status:</strong> ${user.status || 'N/A'}</p>
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += userCard;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function startChat(receiverId, serviceType) {
+            window.location.href = `/start_chat/${receiverId}/${serviceType}`;
+        }
+    </script>
+</body>
+</html>

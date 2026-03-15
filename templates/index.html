@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HandyPro - Your Professional Solution for Handyman Services</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="body">
+<!-- Sidebar Toggle Button -->
+<div id="sidebarToggle" class="btn btn-dark"><i class="fas fa-bars"></i></div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="shadow">
+    <ul class="list-unstyled">
+        <li><a href="#hero"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#scroll-section"><i class="fas fa-star"></i> Features</a></li>
+        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact Us</a></li>
+        <li><a href="#footer"><i class="fas fa-info-circle"></i> Footer</a></li>
+    </ul>
+</div>
+
+<!-- Navbar -->
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/admin_login">
+            <img src="static/images/logo.png" alt="Wind Turbine Logo" style="height: 150px; width: auto; margin-right: 8px;">
+
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/ser_login">User Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Hero Section with Transparent Background Image -->
+<section id="hero" class="hero" style="background-image: url('{{ url_for('static', filename='images/hero-background.jpg') }}');">
+    <div class="container d-flex justify-content-center flex-wrap">
+        <!-- Loop through cards with images in the static folder -->
+        <a href="/signup" class="card-link m-3" style="text-decoration: none; color: inherit;">
+            <div class="card shadow-sm move-card" style="width: 18rem; border-radius: 10px; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/1.jpg') }}" class="card-img-top" alt="Card Image 1">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Electrical Services</h5>
+                </div>
+            </div>
+        </a>
+        <a href="/plumbing_signup" class="card-link m-3" style="text-decoration: none; color: inherit;">
+            <div class="card shadow-sm move-card" style="width: 18rem; border-radius: 10px; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/2.jpg') }}" class="card-img-top" alt="Card Image 2">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Plumbing Services</h5>
+
+                </div>
+            </div>
+        </a>
+        <a href="/carpentry_signup" class="card-link m-3" style="text-decoration: none; color: inherit;">
+            <div class="card shadow-sm move-card" style="width: 18rem; border-radius: 10px; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/3.jpg') }}" class="card-img-top" alt="Card Image 3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Carpentry Services</h5>
+
+                </div>
+            </div>
+        </a>
+        <a href="/clean" class="card-link m-3" style="text-decoration: none; color: inherit;">
+            <div class="card shadow-sm move-card" style="width: 18rem; border-radius: 10px; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/4.jpg') }}" class="card-img-top" alt="Card Image 4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Home Cleaning Services</h5>
+
+                </div>
+            </div>
+        </a>
+         <a href="/appliance" class="card-link m-3" style="text-decoration: none; color: inherit;">
+            <div class="card shadow-sm move-card" style="width: 18rem; border-radius: 10px; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/5.jpg') }}" class="card-img-top" alt="Card Image 4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Appliance Repair Services</h5>
+
+                </div>
+            </div>
+        </a>
+         <a href="/hvac" class="card-link m-3" style="text-decoration: none; color: inherit;">
+            <div class="card shadow-sm move-card" style="width: 18rem; border-radius: 10px; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/6.jpg') }}" class="card-img-top" alt="Card Image 4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">HVAC (Heating, Ventilation, and Air Conditioning) Services</h5>
+
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+
+<!-- Scroll Section with Side Images and Background -->
+<section id="scroll-section" class="scroll-section my-5 py-5">
+    <div class="background-overlay">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <!-- First Image -->
+            <div class="image-container" data-aos="fade-right">
+                <img src="{{ url_for('static', filename='images/8.jpg') }}" alt="Image 1" class="rounded img-fluid scroll-image me-md-4 mb-4 mb-md-0">
+            </div>
+
+            <!-- Text Content -->
+            <div class="text-content text-center text-md-start mx-md-4" data-aos="fade-up">
+                <h3 class="section-title">Reliable and Efficient Service</h3>
+                <p class="section-description">
+                   HandyPro ensures top-quality service with verified professionals ready to assist at your convenience
+                </p>
+            </div>
+
+            <!-- Second Image -->
+            <div class="image-container" data-aos="fade-left">
+                <img src="{{ url_for('static', filename='images/7.jpg') }}" alt="Image 2" class="rounded img-fluid scroll-image ms-md-4 mt-4 mt-md-0">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AOS Library for Animations -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+
+<!-- CSS -->
+<style>
+/* Background Image Section */
+#scroll-section {
+    position: relative;
+    overflow: hidden;
+    background-image: url('{{ url_for("static", filename="images/bg.jpg") }}');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Add a transparent overlay over the background image */
+.background-overlay {
+    background-color: rgba(255, 255, 255, 0.6); /* 40% transparency */
+    position: relative;
+    padding: 50px;
+}
+
+.scroll-section .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.text-content {
+    max-width: 500px;
+    flex: 2;
+}
+
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scroll-image {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+/* Animations */
+[data-aos="fade-right"] {
+    transform: translateX(-50px);
+    opacity: 0;
+}
+
+[data-aos="fade-left"] {
+    transform: translateX(50px);
+    opacity: 0;
+}
+
+[data-aos].aos-animate {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+[data-aos="fade-up"] {
+    transform: translateY(50px);
+    opacity: 0;
+}
+
+/* Animated text and images appear on scroll */
+[data-aos].aos-animate {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Adjustments for Responsiveness */
+@media (max-width: 768px) {
+    .scroll-section .container {
+        flex-direction: column;
+    }
+
+    .scroll-image {
+        margin-bottom: 20px;
+    }
+}
+</style>
+
+<!-- Contact Form -->
+<section id="contact" class="contact-form py-5">
+    <div class="p-4 shadow-lg rounded-3" style="background-image: url('{{ url_for('static', filename='images/bg1.jpg') }}'); background-size: cover; background-position: center; background-color: rgba(255, 255, 255, 0.9);">
+        <h3 class="text-center mb-4">Contact Us</h3>
+        <form class=container>
+            <div class="mb-4">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control form-input" id="name" required>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control form-input" id="email" required>
+            </div>
+            <div class="mb-4">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control form-input" id="message" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-submit w-100">Submit</button>
+        </form>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer id="footer" class="bg-dark text-white text-center py-4">
+    <p>&copy; 2023 My Website. All rights reserved.</p>
+</footer>
+
+<!-- Bootstrap and Custom JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById("sidebarToggle").addEventListener("click", function() {
+        document.getElementById("sidebar").classList.toggle("active");
+    });
+</script>
+</body>
+</html>

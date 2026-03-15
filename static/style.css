@@ -1,0 +1,379 @@
+/* General Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background: linear-gradient(120deg, #e6f7ff, #ffffff 80%);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Sidebar styles */
+#sidebar {
+    position: fixed;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #343a40;
+    transition: all 0.3s;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#sidebar.active {
+    left: 0;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+#sidebar ul li {
+    padding: 15px;
+    text-align: center;
+}
+
+#sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+#sidebar ul li a:hover {
+    color: #e6f7ff;
+}
+
+#sidebarToggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    cursor: pointer;
+    color: #333;
+    background-color: #e6f7ff;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hero Section Styling */
+.hero {
+    height: 100vh;
+    background: url('../images/hero-background.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero h1 {
+    color: #ffffff;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hero p {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-top: 15px;
+}
+
+/* Card Styling and Animation */
+.card-link {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.move-card {
+    animation: move 3s infinite alternate ease-in-out;
+}
+
+.card-link:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card {
+    border: none;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+}
+
+.card:hover img {
+    transform: scale(1.1);
+}
+
+.card-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #005f73;
+}
+
+.card-text {
+      font-size: 1.25rem;
+    font-weight: bold;
+    color: #005f73;
+}
+
+
+/* Keyframes for card movement */
+@keyframes move {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+/* Scroll Section Styling */
+.scroll-section {
+    background-color: #f9f9f9;
+    padding: 60px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.scroll-section .scroll-image {
+    max-width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-section .scroll-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-section .text-content {
+    flex: 1;
+    padding: 20px;
+    color: #333;
+}
+
+.scroll-section .text-content h3 {
+    font-size: 1.75rem;
+    color: #005f73;
+}
+
+.scroll-section .text-content p {
+    font-size: 1rem;
+    color: #123;
+}
+
+/* Contact Form Styling */
+.contact-form {
+    background: url('../images/8.jpg') no-repeat center center;
+    background-size: cover;
+    padding: 60px 20px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.contact-form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.contact-form .container {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form .container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Input and Textarea Styling */
+.form-input {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.form-input:focus {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    border-color: #007bff;
+    transform: scale(1.01);
+}
+
+/* Submit Button Styling */
+.btn-submit {
+    background-color: #007bff;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* Footer Styling */
+footer {
+    background-color: #323a40;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: #e6f7ff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+    .scroll-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    .contact-form .container {
+        width: 90%;
+    }
+}
+/* Navbar Styling */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.navbar-brand img {
+    height: 40px; /* Logo height */
+    width: auto;
+    margin-right: 10px; /* Space between logo and brand text */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.navbar-brand:hover img {
+    transform: scale(1.1); /* Slight zoom on logo hover */
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.2rem;
+    color: #f8f9fa; /* Light color for better readability */
+    padding: 8px 16px;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107; /* Highlight color on hover */
+}
+
+/* Navbar toggle button styling for smaller screens */
+.navbar-toggler {
+    border: none;
+    background-color: #ffc107; /* Customize button color */
+    transition: background-color 0.3s ease;
+}
+
+.navbar-toggler:hover {
+    background-color: #e0a800; /* Darker shade on hover */
+}
+
+/* Optional: Adding padding to the navbar container */
+.navbar .container {
+    padding: 0.5rem 1rem;
+}
+/* Logo zoom effect */
+.navbar-logo {
+    height: 200px;
+    width: auto;
+    margin-right: 10px;
+    transition: transform 0.4s ease;
+    transform-origin: left; /* Sets the origin point for zoom to the left */
+}
+
+.navbar-logo:hover {
+    transform: scale(1.1); /* Slightly zoom in on hover */
+}
+.navbar .nav-link {
+    color: #f8f9fa;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ffc107; /* Gold color on hover */
+}
+
+.navbar-brand span {
+    color: #ffffff; /* Optional to set brand text color */
+}

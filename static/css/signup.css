@@ -1,0 +1,171 @@
+/* signup.css */
+body, html {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 30%;
+    min-width: 200px;
+    background: #1575fc;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.sidebar-logo {
+    max-width: 80%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.sidebar p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Main content area */
+.main-content {
+    width: 70%;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Form styling and other CSS remains the same */
+
+/* Main content area */
+.main-content {
+    width: 70%;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#signup-form {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+}
+
+.input-icon {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-icon input,
+.input-icon textarea,
+.input-icon select {
+    width: 100%;
+    padding: 10px;
+    padding-left: 30px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.input-icon i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+#password-strength-bar {
+    width: 100%;
+    height: 5px;
+    background: #ddd;
+    margin: 10px 0;
+}
+
+#strength-progress {
+    height: 100%;
+    width: 0;
+    background: #f44336;
+    transition: width 0.3s;
+}
+
+#popup-notification {
+    display: none;
+    padding: 10px;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 300px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2575fc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #1b5bbf;
+}
+
+/* Responsive design */
+@media (max-width: 800px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

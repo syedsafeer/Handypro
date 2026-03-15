@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carpentry Services Sign-Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar for branding -->
+        <aside class="sidebar">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Company Logo" class="sidebar-logo">
+            <h1>Carpentry Services</h1>
+            <p>Welcome to our sign-up page for HandyPro carpentry professionals. Join us and offer your skills to those in need!</p>
+        </aside>
+
+        <!-- Main content area for the sign-up form -->
+        <main class="main-content">
+            <div id="signup-form">
+                <h2>Carpentry Services Sign-Up</h2>
+                <form id="form" enctype="multipart/form-data">
+                    <div class="input-icon">
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                        <i class="fa fa-user"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <i class="fa fa-envelope"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="text" id="address" name="address" placeholder="Enter your address" required>
+                        <i class="fa fa-home"></i>
+                    </div>
+
+                    <div class="input-icon">
+                        <input type="text" id="contact_details" name="contact_details" placeholder="Enter your contact number" required>
+                        <i class="fa fa-phone"></i>
+                    </div>
+
+                    <!-- Carpentry Experience -->
+                    <div class="input-icon">
+                        <label for="experience"><i class="fa fa-calendar-alt"></i> Experience:</label>
+                        <select id="experience" name="experience" required>
+                            <option value="" disabled selected>Select your experience</option>
+                            <option value="1 year">1 year</option>
+                            <option value="2 years">2 years</option>
+                            <option value="5 years">5 years</option>
+                            <option value="10 years">10 years</option>
+                        </select>
+                    </div>
+
+                    <!-- Carpentry Skills -->
+                    <div class="input-icon">
+                        <label for="skills"><i class="fa fa-tools"></i> Skills:</label>
+                        <select id="skills" name="skills" multiple required>
+                            <option value="Furniture making">Furniture making</option>
+                            <option value="Cabinet installation">Cabinet installation</option>
+                            <option value="Woodworking">Woodworking</option>
+                            <option value="Framing and structural work">Framing and structural work</option>
+                        </select>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div class="input-icon">
+                        <textarea id="certifications" name="certifications" placeholder="List your certifications" required></textarea>
+                        <i class="fa fa-certificate"></i>
+                    </div>
+
+                    <!-- References -->
+                    <div class="input-icon">
+                        <textarea id="references" name="references" placeholder="Provide your references" required></textarea>
+                        <i class="fa fa-address-book"></i>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-icon">
+                        <input type="password" id="password" name="password" placeholder="Enter a strong password" required oninput="checkPasswordStrength()">
+                        <i class="fa fa-lock"></i>
+                    </div>
+
+                    <div id="password-strength-bar">
+                        <div id="strength-progress"></div>
+                    </div>
+                    <div id="password-strength-text"></div>
+
+                    <div class="input-icon">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" required>
+                        <i class="fa fa-lock"></i>
+                    </div>
+
+                    <!-- Profile Image -->
+                    <div class="input-icon">
+                        <input type="file" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+                        <i class="fa fa-camera"></i>
+                    </div>
+
+                    <div id="image-preview" class="image-preview">
+                        <img id="preview" src="#" alt="Image Preview" style="display: none;">
+                    </div>
+
+                    <button type="button" onclick="submitSignup()">Register</button>
+                </form>
+                <a href="/login">Already have an account? Log in</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Popup Notification -->
+    <div id="popup-notification" class="popup-notification">
+        <p id="popup-message"></p>
+    </div>
+
+    <script>
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthText = document.getElementById('password-strength-text');
+            const strengthBar = document.getElementById('strength-progress');
+            let strength = 0;
+            if (/[A-Z]/.test(password)) strength += 20;
+            if (/[a-z]/.test(password)) strength += 20;
+            if (/[0-9]/.test(password)) strength += 20;
+            if (/[@#$%^&*]/.test(password)) strength += 20;
+            if (password.length >= 8) strength += 20;
+
+            strengthBar.style.width = strength + '%';
+            strengthText.textContent = strength <= 40 ? 'Weak Password' : strength <= 80 ? 'Medium Password' : 'Strong Password';
+            strengthBar.style.backgroundColor = strength <= 40 ? '#f44336' : strength <= 80 ? '#ff9800' : '#4caf50';
+        }
+
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+
+        async function submitSignup() {
+            const formData = new FormData(document.getElementById('form'));
+            try {
+                const response = await fetch('/carpentry_signup', { method: 'POST', body: formData });
+                const result = await response.json();
+                showPopupNotification(response.status === 201 ? 'success' : 'error', result.message || result.error);
+                if (response.status === 201) setTimeout(() => window.location.href = "/login", 2000);
+            } catch (error) {
+                showPopupNotification('error', 'Error: Unable to sign up. Please try again later.');
+            }
+        }
+
+        function showPopupNotification(type, message) {
+            const popup = document.getElementById('popup-notification');
+            popup.textContent = message;
+            popup.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
+            popup.style.display = 'block';
+            setTimeout(() => { popup.style.display = 'none'; }, 3000);
+        }
+    </script>
+</body>
+</html>

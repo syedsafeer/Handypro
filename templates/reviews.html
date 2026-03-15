@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plumber Reviews - HandyPro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/worker_dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .reviews-container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        .review-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            text-align: left;
+            position: relative;
+        }
+
+        .review-card .reviewer {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .review-card .feedback {
+            margin: 10px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .review-card .rating {
+            color: #f39c12;
+            font-size: 18px;
+        }
+
+        .review-card .timestamp {
+            font-size: 12px;
+            color: #999;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .no-reviews {
+            font-size: 16px;
+            color: #888;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reviews-container">
+        <h2><i class="fas fa-star"></i> Reviews for {{ user.name }}</h2>
+
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="review-card">
+                    <div class="reviewer"><i class="fas fa-user"></i> {{ review.reviewer }}</div>
+                    <div class="feedback">{{ review.feedback }}</div>
+                    <div class="rating">
+                        {% for _ in range(review.rating|int) %}
+                            <i class="fas fa-star"></i>
+                        {% endfor %}
+                    </div>
+                    <div class="timestamp"><i class="fas fa-clock"></i> {{ review.timestamp }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-reviews">No reviews yet!</p>
+        {% endif %}
+
+        <a href="/plumbing_dashboard" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+</body>
+</html>
