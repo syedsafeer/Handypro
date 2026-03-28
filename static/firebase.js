@@ -1,7 +1,7 @@
 
 // Firebase Configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyAE4WV0_NHvzXkLIQXTcWNdH4GFsGft3Lg",
+    apiKey: "Your API Key",
     authDomain: "windturbine-5b07e.firebaseapp.com",
     projectId: "https://windturbine-5b07e-default-rtdb.firebaseio.com/",
     storageBucket: "windturbine-5b07e.appspot.com",
